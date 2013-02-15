@@ -1,0 +1,35 @@
+.tag {
+  width: 100px;
+  height: 100px;
+  z-index: 2;
+  position: absolute;
+  border: 3px solid black;
+}
+
+.photo {
+  margin:auto;
+}
+
+.photo img {
+  z-index: 1;
+  position: relative;
+
+}
+
+.nameList {
+  position: absolute;
+  z-index: 2;
+  background-color: white;
+
+}
+
+.name {
+  border: 1px solid black;
+}
+
+.tag strong {
+  background-color: white;
+  position: absolute;
+  display: block;
+  top: 105px;
+}
