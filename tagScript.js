@@ -38,9 +38,13 @@ var PhotoScript = (function () {
   // Photo.all && Photo.find will go here once we have multiple photos
 
   function ShowPhoto(el, photo) {
+    var that = this;
     this.renderPhoto = function () {
       el.empty();
       el.append("<img src=" + photo.filename + ">");
+
+      // var showTagsButton = $('#showTags');
+      // hardcode add tag button
     }
 
     this.renderTags = function () {
@@ -54,17 +58,27 @@ var PhotoScript = (function () {
       })
     }
 
-    this.bind = function () {
 
-    },
+      // showTagsButton.unbind("click", handleTagsClick);
+      // function handleTagsClick() {
+      //   photoShower.renderTags();
+      // };
+      // showTagsButton.click(handleTagsClick);
+
+
+    this.bind = function () {
+      $('#showTags').click(that.renderTags);
+    }
 
     this.unbind = function () {
-
+      $('#showTags').unbind("click", that.renderTags);
     }
   }
 
   function SelectPhoto(el, photos, clickCallback) {
     var that = this;
+
+    this.unbinder = null;
 
     this.renderPhotoLink = function (photo) {
       var link = $('<a href="#"></a>');
@@ -88,8 +102,11 @@ var PhotoScript = (function () {
     };
 
     this.clickPhoto = function (event) {
+      if (that.unbinder) {
+        that.unbinder();
+      }
       var photoID = $(event.target).attr("data-photo-id");
-      clickCallback(Photo.find(photos, photoID));
+      that.unbinder = clickCallback(Photo.find(photos, photoID));
     };
 
 
@@ -114,27 +131,30 @@ var tagsArray = [new TagScript.addTag(1, "Ned", 200, 300),
 $(function() {
   var main = $("#main");
   var sidebar = $("#sidebar");
-  var showTagsButton = $('#showTags');
+
 
 
   var photoSelector = new PhotoScript.SelectPhoto(
     sidebar, photoArray, function (photo) {
-
+      // 1. create ShowPhoto
+      // 2. tell it to bind to events
+      // 3. return to PhotoSelector a method for it
+      //    to call before next click which unbindes ShowPhoto.
 
 
       // oldHandler.unbind();
       // create newHandler
       // call newHandler.bind(button1, button2)
 
-      showTagsButton.unbind("click", handleTagsClick);
 
       var photoShower = new PhotoScript.ShowPhoto(main, photo);
       photoShower.renderPhoto();
+      photoShower.bind()
 
-      function handleTagsClick() {
-        photoShower.renderTags();
-      };
-      showTagsButton.click(handleTagsClick);
+      return function() {
+        photoShower.unbind();
+      }
+
 
 
   });
