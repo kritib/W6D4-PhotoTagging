@@ -1,6 +1,27 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <style>
+    .buttons {
+      display: none;
+    }
+
+    .buttons.photoShowing {
+      display: inline-block;
+    }
+
+    .photoShowing #hideTags, .tagsShowing #showTags {
+      display: none;
+    }
+
+    .tagsShowing #hideTags, .tagsShowing .tag {
+      display: inline-block;
+    }
+
+  </style>
+
+
+
   <meta charset="utf-8">
   <title>Photo Tagging</title>
   <link rel="stylesheet" href="style.css">
@@ -14,9 +35,10 @@
   <div id="sidebar"></div>
   <div id="main"></div>
 
-
-  <button id="showTags"> Show Tags </button>
-  <button id="addTag"> Add Tag </button>
-
+  <div class="buttons">
+    <button id="showTags"> Show Tags </button>
+    <button id="hideTags"> Hide Tags </button>
+    <button id="addTag"> Add Tag </button>
+  </div>
 </body>
 </html>

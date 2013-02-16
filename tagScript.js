@@ -14,6 +14,48 @@ var TagScript = (function () {
     photo.tags.push(tag);
   }
 
+  function makeNewTag(currentPhoto) {
+
+    function handleTagClick(event) {
+      this.relPos = {
+        x: event.pageX,
+        y: event.pageY
+      };
+
+      this.showTagBox();
+    }
+
+    function renderTagBox() {
+      this.currentPhoto.prepend(
+        $("<div></div>")
+          .addClass("tempTag")
+          .css("left", this.relPos.x - 50)
+          .css("top", this.relPos.y - 50)
+      )
+    }
+
+    function renderNamesTable() {
+
+
+
+
+
+
+      renderNameLink
+      var table = $("<div></div>")
+        .addClass("namesList")
+        .css("left", this.relPos.x + 60)
+        .css("top", this.relPos.y - 50);
+      namesArray.forEach(function(name){
+        table.append(
+          $("<div></div>")
+          .addClass("name")
+          .append("<well>" + name + "</well>")
+          )
+      })
+    }
+  }
+
   return {
     Tag: Tag,
     addTag: addTag
@@ -43,11 +85,14 @@ var PhotoScript = (function () {
       el.empty();
       el.append("<img src=" + photo.filename + ">");
 
+      that.renderTags()
+
       // var showTagsButton = $('#showTags');
       // hardcode add tag button
     }
 
     this.renderTags = function () {
+
       photo.tags.forEach(function(tag) {
         el.append(
           $("<div><strong>" + tag.name + "</strong></div>")
@@ -59,6 +104,7 @@ var PhotoScript = (function () {
     }
 
 
+
       // showTagsButton.unbind("click", handleTagsClick);
       // function handleTagsClick() {
       //   photoShower.renderTags();
@@ -67,11 +113,22 @@ var PhotoScript = (function () {
 
 
     this.bind = function () {
-      $('#showTags').click(that.renderTags);
+      $('#showTags').click(function() {
+        el.addClass('tagsShowing');
+        $(".buttons").addClass('tagsShowing');
+      })
+
+      $('#hideTags').click(function() {
+        el.removeClass('tagsShowing');
+        $(".buttons").removeClass('tagsShowing');
+      })
+      // $('#addTags').click(that.//something)
     }
 
     this.unbind = function () {
+      $(".buttons").removeClass('tagsShowing');
       $('#showTags').unbind("click", that.renderTags);
+      // $('#addTags').unbind("click", that.//something)
     }
   }
 
@@ -105,6 +162,7 @@ var PhotoScript = (function () {
       if (that.unbinder) {
         that.unbinder();
       }
+      $('.buttons').addClass('photoShowing');
       var photoID = $(event.target).attr("data-photo-id");
       that.unbinder = clickCallback(Photo.find(photos, photoID));
     };
@@ -142,9 +200,6 @@ $(function() {
       //    to call before next click which unbindes ShowPhoto.
 
 
-      // oldHandler.unbind();
-      // create newHandler
-      // call newHandler.bind(button1, button2)
 
 
       var photoShower = new PhotoScript.ShowPhoto(main, photo);
