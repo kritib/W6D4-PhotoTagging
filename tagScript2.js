@@ -78,40 +78,40 @@ $(function () {
 });
 
 
-  // function SelectPhoto(el, photos, clickCallback) {
-  //   var that = this;
+  function SelectPhoto(el, photos, clickCallback) {
+    var that = this;
 
-  //   this.unbinder = null;
+    this.unbinder = null;
 
-  //   this.renderPhotoLink = function (photo) {
-  //     var link = $('<a href="#"></a>');
+    this.renderPhotoLink = function (photo) {
+      var link = $('<a href="#"></a>');
 
-  //     link.text("<well>" + name + "</well>");
-  //     link.attr("data-photo-id", photo.id);
-  //     link.click(that.clickPhoto.bind(that));
+      link.text("<well>" + name + "</well>");
+      link.attr("data-photo-id", photo.id);
+      link.click(that.clickPhoto.bind(that));
 
-  //     return link;
-  //   };
+      return link;
+    };
 
-  //   this.render = function () {
-  //     var ul = $("<ul></ul>");
+    this.render = function () {
+      var ul = $("<ul></ul>");
 
-  //     _.each(photos, function (photo) {
-  //       var link = that.renderPhotoLink(photo);
-  //       ul.append($("<li></li>").append(link));
-  //     });
+      _.each(photos, function (photo) {
+        var link = that.renderPhotoLink(photo);
+        ul.append($("<li></li>").append(link));
+      });
 
-  //     $(el).html(ul);
-  //   };
+      $(el).html(ul);
+    };
 
-  //   this.clickPhoto = function (event) {
-  //     if (that.unbinder) {
-  //       that.unbinder();
-  //     }
-  //     $('.buttons').addClass('photoShowing');
-  //     var photoID = $(event.target).attr("data-photo-id");
-  //     that.unbinder = clickCallback(Photo.find(photos, photoID));
-  //   };
+    this.clickPhoto = function (event) {
+      if (that.unbinder) {
+        that.unbinder();
+      }
+      $('.buttons').addClass('photoShowing');
+      var photoID = $(event.target).attr("data-photo-id");
+      that.unbinder = clickCallback(Photo.find(photos, photoID));
+    };
 
 
   // }

@@ -14,51 +14,69 @@ var TagScript = (function () {
     photo.tags.push(tag);
   }
 
-  function makeNewTag(currentPhoto) {
+  function MakeNewTag(el, currentPhoto) {
+    var that = this;
 
-    function handleTagClick(event) {
-      this.relPos = {
+    this.bind = function (el) {
+      el.click(function(event) {
+        that.clickTag(event);
+      });
+    }
+
+    this.clickTag = function (event) {
+      var relPos = {
         x: event.pageX,
         y: event.pageY
       };
 
-      this.showTagBox();
+      $('.tempTag')
+        .css("left", relPos.x - 50)
+        .css("top", relPos.y - 50);
+
+      $('.namesList')
+        .css("left", relPos.x + 60)
+        .css("top", relPos.y - 50);
+
+      el.addClass('newTag');
     }
 
-    function renderTagBox() {
-      this.currentPhoto.prepend(
-        $("<div></div>")
-          .addClass("tempTag")
-          .css("left", this.relPos.x - 50)
-          .css("top", this.relPos.y - 50)
-      )
+    // called when 'add tag' button clicked
+    // happens first
+    this.renderNewTag = function() {
+      el.prepend(this.createTagBox());
+      el.prepend(this.createNamesTable());
     }
 
-    function renderNamesTable() {
+    this.createTagBox = function() {
+      return $("<div></div>")
+              .addClass("tempTag");
+    }
 
+    this.createNamesTable = function() {
+      var table = $("<ul></ul>")
+        .addClass("namesList");
 
-
-
-
-
-      renderNameLink
-      var table = $("<div></div>")
-        .addClass("namesList")
-        .css("left", this.relPos.x + 60)
-        .css("top", this.relPos.y - 50);
-      namesArray.forEach(function(name){
+      namesArray.forEach(function(name) {
         table.append(
-          $("<div></div>")
-          .addClass("name")
-          .append("<well>" + name + "</well>")
-          )
+          $("<li>" + name + "</li>")
+            .attr("data-name", name)
+            .click(that.clickName.bind(that))
+        );
       })
+
+      return table;
     }
+
+    this.clickName = function (event) {
+      TagScript.addTag(currentPhoto.id, "data-name", that.relPos.x, that.relPos.y)
+    }
+
   }
 
   return {
     Tag: Tag,
-    addTag: addTag
+    addTag: addTag,
+    MakeNewTag: MakeNewTag
   }
 
 })();
@@ -87,8 +105,6 @@ var PhotoScript = (function () {
 
       that.renderTags()
 
-      // var showTagsButton = $('#showTags');
-      // hardcode add tag button
     }
 
     this.renderTags = function () {
@@ -104,14 +120,6 @@ var PhotoScript = (function () {
     }
 
 
-
-      // showTagsButton.unbind("click", handleTagsClick);
-      // function handleTagsClick() {
-      //   photoShower.renderTags();
-      // };
-      // showTagsButton.click(handleTagsClick);
-
-
     this.bind = function () {
       $('#showTags').click(function() {
         el.addClass('tagsShowing');
@@ -122,7 +130,12 @@ var PhotoScript = (function () {
         el.removeClass('tagsShowing');
         $(".buttons").removeClass('tagsShowing');
       })
-      // $('#addTags').click(that.//something)
+
+      $('#addTag').click(function() {
+        var newTag = new TagScript.MakeNewTag(el, photo);
+        newTag.renderNewTag()
+        newTag.bind(el)
+      })
     }
 
     this.unbind = function () {
@@ -185,6 +198,8 @@ var tagsArray = [new TagScript.addTag(1, "Ned", 200, 300),
                  new TagScript.addTag(1, "Kush", 400, 200),
                  new TagScript.addTag(2, "Jon", 100, 150),
                  new TagScript.addTag(2, "Giorgio", 300, 100)];
+
+var namesArray = ["Ned", "Jonathan", "Kush"];
 
 $(function() {
   var main = $("#main");
