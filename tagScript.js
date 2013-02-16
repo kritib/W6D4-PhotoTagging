@@ -24,18 +24,18 @@ var TagScript = (function () {
     }
 
     this.clickTag = function (event) {
-      var relPos = {
+      this.relPos = {
         x: event.pageX,
         y: event.pageY
       };
 
       $('.tempTag')
-        .css("left", relPos.x - 50)
-        .css("top", relPos.y - 50);
+        .css("left", this.relPos.x - 50)
+        .css("top", this.relPos.y - 50);
 
       $('.namesList')
-        .css("left", relPos.x + 60)
-        .css("top", relPos.y - 50);
+        .css("left", this.relPos.x + 60)
+        .css("top", this.relPos.y - 50);
 
       el.addClass('newTag');
     }
@@ -140,6 +140,7 @@ var PhotoScript = (function () {
 
     this.unbind = function () {
       $(".buttons").removeClass('tagsShowing');
+      el.removeClass('newTag');
       $('#showTags').unbind("click", that.renderTags);
       // $('#addTags').unbind("click", that.//something)
     }
